@@ -654,7 +654,7 @@ class Controller:
     def target_not_found(self):
         print("controller - target_not_found")
         self.view.popupmsg("Atenció. No s'ha trobat el target!")
-
+"""
 if __name__ == "__main__":
     root = tk.Tk()
     user32 = ctypes.windll.user32
@@ -674,3 +674,4 @@ if __name__ == "__main__":
 
     app = Controller(root)
     root.mainloop()
+"""
