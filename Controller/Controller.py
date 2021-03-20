@@ -4,7 +4,7 @@ Tool that allows the connection between the View and Model.
 Handles all the incoming requests.
 """
 
-from View import View
+#from View import View
 from Model import Model
 from pressure_image import Pressure_img
 from data_manager import Data_manager

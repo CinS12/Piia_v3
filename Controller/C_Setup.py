@@ -1,7 +1,7 @@
 from pubsub import pub
 
 from Model import Model
-from View import View
+from View.V_Setup import ViewSetup
 from data_manager import Data_manager
 from pressure_image import Pressure_img
 from Controller.ControllerProcessing import C_Metadata
@@ -11,9 +11,8 @@ class ControllerSetup:
     def __init__(self, parent):
         self.parent = parent
         self.model = Model()
-        self.view = View(parent)
+        self.view = ViewSetup(parent)
         self.data_manager = Data_manager()
-        self.view.setup()
         C_Metadata.ControllerMetadata(self.model, self.view)
 
         pub.subscribe(self.button_1_pressed, "BUTTON_1_PRESSED")
