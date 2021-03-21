@@ -6,7 +6,7 @@ from pubsub import pub
 from tkcalendar import DateEntry
 from View.View_Pages import V_MainPage
 from View.View_Pages import V_ProcessingPage
-from View.View_Pages import V_View
+from View.View_Pages import V_ViewPage
 
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
@@ -31,7 +31,7 @@ class ViewSetup:
         """
         self.main = V_MainPage.MainPage(self.container)
         self.processing = V_ProcessingPage.ProcessingPage(self.container)
-        self.view = V_View.ViewPage(self.container)
+        self.view = V_ViewPage.ViewPage(self.container)
         #self.crear_finestres()
         #self.inserir_finestres()
         self.crear_menu()
@@ -65,6 +65,7 @@ class ViewSetup:
 
     def go_to_view_page(self):
         self.view.page.tkraise()
+        #self.data_manager.load_data()
 
     def popupmsg(self, msg):
         """

@@ -1,19 +1,22 @@
 from pubsub import pub
 
-from Model import Model
+from Model import M_ImageReader
 from View.V_Setup import ViewSetup
 from data_manager import Data_manager
 from pressure_image import Pressure_img
 from Controller.ControllerProcessing import C_Metadata
+from Model.M_MetadataManager import MetadataManager
+from Model.M_ImageReader import ImageReader
 
 class ControllerSetup:
 
     def __init__(self, parent):
         self.parent = parent
-        self.model = Model()
+        self.model_reader = ImageReader()
+        self.model_metadata = MetadataManager()
         self.view = ViewSetup(parent)
         self.data_manager = Data_manager()
-        C_Metadata.ControllerMetadata(self.model, self.view)
+        C_Metadata.ControllerMetadata(self.model_metadata, self.view)
 
         pub.subscribe(self.button_1_pressed, "BUTTON_1_PRESSED")
         pub.subscribe(self.button_2_pressed, "BUTTON_2_PRESSED")
@@ -67,7 +70,7 @@ class ControllerSetup:
 
         print("controller - load imatge")
 
-        self.pressure_img.path = self.model.carregar_imatge()
+        self.pressure_img.path = self.model_reader.carregar_imatge()
 
     def image_loaded(self, image_original, image_tk):
         """

@@ -5,7 +5,7 @@ Handles all the incoming requests.
 """
 
 #from View import View
-from Model import Model
+#from Model import Model
 from pressure_image import Pressure_img
 from data_manager import Data_manager
 from pubsub import pub
