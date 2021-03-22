@@ -1,9 +1,9 @@
 from pubsub import pub
 
-from View.V_Setup import ViewSetup
+from View import V_Setup
 from data_manager import Data_manager
-from pressure_image import Pressure_img
-from Controller import C_Metadata, C_ImagePreSegmentation
+from Model.pressure_image import Pressure_img
+from Controller import C_Metadata, C_ImagePreSegmentation, C_ImageSegmentation
 from Model import M_MetadataManager, M_ImageReader
 
 class ControllerSetup:
@@ -12,9 +12,10 @@ class ControllerSetup:
         self.parent = parent
         self.model_reader = M_ImageReader.ImageReader()
         self.model_metadata = M_MetadataManager.MetadataManager()
-        self.view = ViewSetup(parent)
+        self.view = V_Setup.ViewSetup(parent)
         self.data_manager = Data_manager()
         self.pre_processing = None
+        self.processing = None
         C_Metadata.ControllerMetadata(self.model_metadata, self.view)
 
         pub.subscribe(self.button_1_pressed, "BUTTON_1_PRESSED")
@@ -87,3 +88,4 @@ class ControllerSetup:
         self.view.processing.update_image(image_tk)
         self.view.processing.botoImg()
         self.pre_processing = C_ImagePreSegmentation.ControllerImagePreSegmentation(self.view, self.pressure_img)
+        self.processing = C_ImageSegmentation.ControllerImageSegmentation(self.view, self.pressure_img)

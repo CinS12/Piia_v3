@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from pubsub import pub
-from View import V_MainPage, V_ProcessingPage, V_ViewPage
+from View import V_MainPage, V_ProcessingPage, V_ViewPage, V_PreSegmentationGUI, V_SegmentationGUI
 
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
@@ -27,6 +27,8 @@ class ViewSetup:
         self.main = V_MainPage.MainPage(self.container)
         self.processing = V_ProcessingPage.ProcessingPage(self.container)
         self.view = V_ViewPage.ViewPage(self.container)
+        self.pre_processing_gui = V_PreSegmentationGUI.PreSegmentationGUI(self.container)
+        self.processing_gui = V_SegmentationGUI.SegmentationGUI(self.container)
         #self.crear_finestres()
         #self.inserir_finestres()
         self.crear_menu()

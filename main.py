@@ -2,10 +2,8 @@ import tkinter as tk
 import ctypes
 from Controller import Controller
 import Controller.C_Setup as C_Setup
-import Test.kk
 
 if __name__ == "__main__":
-    Test.kk.testkk()
     root = tk.Tk()
     user32 = ctypes.windll.user32
     #screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
