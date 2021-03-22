@@ -1,12 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from PIL import ImageTk, Image
-from pathlib import Path
 from pubsub import pub
-from tkcalendar import DateEntry
-from View.View_Pages import V_MainPage
-from View.View_Pages import V_ProcessingPage
-from View.View_Pages import V_ViewPage
+from View import V_MainPage, V_ProcessingPage, V_ViewPage
 
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)

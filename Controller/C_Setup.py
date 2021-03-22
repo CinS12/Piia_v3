@@ -1,21 +1,20 @@
 from pubsub import pub
 
-from Model import M_ImageReader
 from View.V_Setup import ViewSetup
 from data_manager import Data_manager
 from pressure_image import Pressure_img
-from Controller.ControllerProcessing import C_Metadata
-from Model.M_MetadataManager import MetadataManager
-from Model.M_ImageReader import ImageReader
+from Controller import C_Metadata, C_ImagePreSegmentation
+from Model import M_MetadataManager, M_ImageReader
 
 class ControllerSetup:
 
     def __init__(self, parent):
         self.parent = parent
-        self.model_reader = ImageReader()
-        self.model_metadata = MetadataManager()
+        self.model_reader = M_ImageReader.ImageReader()
+        self.model_metadata = M_MetadataManager.MetadataManager()
         self.view = ViewSetup(parent)
         self.data_manager = Data_manager()
+        self.pre_processing = None
         C_Metadata.ControllerMetadata(self.model_metadata, self.view)
 
         pub.subscribe(self.button_1_pressed, "BUTTON_1_PRESSED")
@@ -54,7 +53,7 @@ class ControllerSetup:
         try:
             if self.pressure_img.loaded:
                 if self.pressure_img.processed:
-                    self.model.getData(data)
+                    self.model_metadata.getData(data)
                 else:
                     self.view.popupmsg("És necessari processar la imatge.")
             else:
@@ -85,5 +84,6 @@ class ControllerSetup:
         self.pressure_img = Pressure_img()
         self.pressure_img.img_origin = image_original
         self.pressure_img.loaded = True
-        self.view.update_image(image_tk)
-        self.view.botoImg()
+        self.view.processing.update_image(image_tk)
+        self.view.processing.botoImg()
+        self.pre_processing = C_ImagePreSegmentation.ControllerImagePreSegmentation(self.view, self.pressure_img)

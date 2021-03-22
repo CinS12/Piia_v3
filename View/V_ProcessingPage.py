@@ -13,11 +13,11 @@ FONT_MSG = ("Verdana", 8)
 class ProcessingPage:
     def __init__(self, parent):
         self.container = parent
-        self.crear_processing_processing()
-        self.inserir_processing_processing()
+        self.crear_processing()
+        self.inserir_processing()
         return
 
-    def crear_processing_processing(self,):
+    def crear_processing(self,):
         """
         Creates the frame and main labels of page_1's UI (Process images).
         """
@@ -27,13 +27,13 @@ class ProcessingPage:
         self.p1_button_1 = ttk.Button(self.page_1, text="Carrega imatge", command=self.carregar_imatge)
         self.p1_button_2 = ttk.Button(self.page_1, text="Enrere", command=self.tornar_main)
         self.p1_button_img = ttk.Button(self.page_1, text="Processar imatge", command=lambda:self.processar_img())
-        path = Path(__file__).parent / "../../resources/load_img.png"
+        path = Path(__file__).parent / "../resources/load_img.png"
         img = ImageTk.PhotoImage(Image.open(path))
         self.p1_img_label = tk.Label(self.page_1, image=img)
         self.p1_img_label.image = img
         self.crear_camps_dades()
 
-    def inserir_processing_processing(self):
+    def inserir_processing(self):
         self.page_1.grid(row=0, column=0, sticky="NESW")
         self.p1_label_1.grid(row=0, column=2, pady=10, padx=1)
         self.p1_button_1.grid(row=1, column=1, pady=0, padx=20, sticky="SW")
@@ -242,3 +242,23 @@ class ProcessingPage:
 
     def tornar_main(self):
         pub.sendMessage("BACK_TO_MAIN_PAGE")
+
+    def update_image(self, img_tk):
+        """
+        Sends a request to Controller to update the image label.
+        Parameters
+        ----------
+        image_tk : PIL Image
+           image ready to be loaded in a label
+        """
+
+        self.p1_img_label.configure(image=img_tk)
+        self.p1_img_label.image = img_tk
+        return
+
+    def botoImg(self):
+        """
+        Places the button to process image.
+        """
+
+        self.p1_button_img.grid(row=1, column=1, pady=0, padx=20, sticky="SE")
