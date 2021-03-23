@@ -10,29 +10,25 @@ FONT_MSG = ("Verdana", 8)
 class ViewPage:
     def __init__(self, parent):
         self.container = parent
-        self.crear_view_page()
-        self.inserir_view_page()
+        self.page = tk.Frame(self.container)
+        self.elements_view_page()
         return
 
-    def crear_view_page(self):
+    def elements_view_page(self):
         """
                Creates the frame and main labels of page_2's UI (View images).
                """
-
-        self.page = tk.Frame(self.container)
-        self.p2_label_2 = ttk.Label(self.page, text="Visualitzar imatges", font=FONT_BENVINGUDA)
-        self.p2_button_1 = ttk.Button(self.page, text="Enrere", command=self.tornar_main)
-        self.crear_elements_p2()
-
-    def inserir_view_page(self):
+        p2_label_2 = ttk.Label(self.page, text="Visualitzar imatges", font=FONT_BENVINGUDA)
+        p2_button_1 = ttk.Button(self.page, text="Enrere", command=self.tornar_main)
+        self.crear_elements_viewer()
         self.page.grid(row=0, column=0, sticky="NESW")
-        self.p2_label_2.pack(pady=20)
-        self.p2_button_1.pack(pady=0)
+        p2_label_2.pack(pady=20)
+        p2_button_1.pack(pady=0)
         self.p2_frame_list.pack(pady=20)
         self.p2_frame_elements.pack(pady=20)
         self.p2_frame_img.grid(row=1, column=1, pady=20, padx=20, sticky="w")
         self.p2_frame_metadata.grid(row=1, column=2, pady=20, padx=20, sticky="w")
-    def crear_elements_p2(self):
+    def crear_elements_viewer(self):
         """
         Creates and places the main frames and labels of page 2 (View images).
         """

@@ -15,34 +15,30 @@ FONT_MSG = ("Verdana", 8)
 class ProcessingPage:
     def __init__(self, parent):
         self.container = parent
-        self.crear_processing()
-        self.inserir_processing()
+        self.page = tk.Frame(self.container)
+        self.elements_processing()
         self.emina_barthel = V_EminaBarthel.EminaBarthel()
         return
 
-    def crear_processing(self,):
+    def elements_processing(self,):
         """
         Creates the frame and main labels of page_1's UI (Process images).
         """
-
-        self.page_1 = tk.Frame(self.container)
-        self.p1_label_1 = ttk.Label(self.page_1, text="Processar imatges", font=FONT_BENVINGUDA)
-        self.p1_button_1 = ttk.Button(self.page_1, text="Carrega imatge", command=self.carregar_imatge)
-        self.p1_button_2 = ttk.Button(self.page_1, text="Enrere", command=self.tornar_main)
-        self.p1_button_img = ttk.Button(self.page_1, text="Processar imatge", command=self.processar_img)
+        p1_label_1 = ttk.Label(self.page, text="Processar imatges", font=FONT_BENVINGUDA)
+        p1_button_1 = ttk.Button(self.page, text="Carrega imatge", command=self.carregar_imatge)
+        p1_button_2 = ttk.Button(self.page, text="Enrere", command=self.tornar_main)
+        self.p1_button_img = ttk.Button(self.page, text="Processar imatge", command=self.processar_img)
         path = Path(__file__).parent / "../resources/load_img.png"
         img = ImageTk.PhotoImage(Image.open(path))
-        self.p1_img_label = tk.Label(self.page_1, image=img)
+        self.p1_img_label = tk.Label(self.page, image=img)
         self.p1_img_label.image = img
         self.crear_camps_dades()
-
-    def inserir_processing(self):
-        self.page_1.grid(row=0, column=0, sticky="NESW")
-        self.p1_label_1.grid(row=0, column=2, pady=10, padx=1)
-        self.p1_button_1.grid(row=1, column=1, pady=0, padx=20, sticky="SW")
+        self.page.grid(row=0, column=0, sticky="NESW")
+        p1_label_1.grid(row=0, column=2, pady=10, padx=1)
+        p1_button_1.grid(row=1, column=1, pady=0, padx=20, sticky="SW")
         self.p1_img_label.grid(row=2, column=1, pady=0, padx=20, sticky="N")
         self.p1_data_frame.grid(row=2, column=3, pady=5, padx=1, sticky="n")
-        self.p1_button_2.grid(row=1, column=2, pady=20, padx=20, sticky="w")
+        p1_button_2.grid(row=1, column=2, pady=20, padx=20, sticky="w")
         self.p1_label_2.grid(row=1, column=1, padx=5, pady=0, sticky="n")
         self.p1_data_camps.grid(row=2, column=1, pady=20, padx=10)
         self.p1_button_3.grid(row=3, column=1, pady=10, padx=10, sticky="e")
@@ -67,7 +63,7 @@ class ProcessingPage:
 
         self.popup_tr_ant = []
         self.popup_tr_top = []
-        self.p1_data_frame = tk.Frame(self.page_1, borderwidth=2, relief="groove")
+        self.p1_data_frame = tk.Frame(self.page, borderwidth=2, relief="groove")
         self.p1_label_2 = ttk.Label(self.p1_data_frame, text="Recull de dades", font=FONT_BENVINGUDA)
 
         self.p1_data_camps = ttk.Frame(self.p1_data_frame, borderwidth=2, relief="groove")
@@ -241,7 +237,7 @@ class ProcessingPage:
                 self.temps_imm_combobox, self.temps_hosp_entry, self.temps_hosp_combobox, self.temps_inst_entry,
                 self.temps_inst_combobox, self.cal_data_entry, self.emina_scale, self.barthel_scale,
                 self.contencio, self.temps_conten_entry, self.temps_conten_combobox, self.grade_combobox, self.cultiu,
-                self.protein_entry, self.albumina_entry, self.popup_tr_ant, self.popup_tr_top]
+                self.protein_entry, self.albumina_entry, self.emina_barthel.popup_tr_ant, self.emina_barthel.popup_tr_top]
         pub.sendMessage("BUTTON_3_PRESSED", data=data)
 
     def tornar_main(self):

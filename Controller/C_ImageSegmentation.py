@@ -27,24 +27,6 @@ class ControllerImageSegmentation:
         self.pressure_img.mask = img_cv2_mask
         self.view.processing_gui.segmentation_gui(img_imgtk_mask, img_cv2_mask)
 
-    def whitebalance(self, img_cv2_mask):
-        """
-        Checks if flash reduction has been called and calls
-        Pressure_img function to reduce flash if not.
-        Calls the View function to ask user confirmation.
-        Parameters
-        ----------
-        img_cv2_mask : image cv2
-           image selected by user to reduce its flash
-        """
-
-        print("controller - whitebalance!")
-        if self.pressure_img.whitebalanced == False:
-                img_whitebalanced = self.pressure_img.target_detector.whiteBalance()
-                self.view.processing_gui.ask_whitebalance_confirmation(img_cv2_mask, img_whitebalanced)
-        else:
-            self.view.popupmsg("Ja s'ha aplicat la reducció.")
-
     def whitebalance_confirmated(self, img_cv2_whitebalanced):
         """
         Updates Pressure_img mask and flash_reduced boolean.

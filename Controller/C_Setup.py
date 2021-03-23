@@ -85,16 +85,16 @@ class ControllerSetup:
         """
 
         print("controller - Botó 3!")
-        #try:
-        if self.pressure_img.loaded:
-            if self.pressure_img.processed:
-                self.model_metadata.getData(data)
+        try:
+            if self.pressure_img.loaded:
+                if self.pressure_img.processed:
+                    self.model_metadata.getData(data)
+                else:
+                    self.view.popupmsg("És necessari processar la imatge.")
             else:
-                self.view.popupmsg("És necessari processar la imatge.")
-        else:
+                self.view.popupmsg("És necessari carregar una imatge")
+        except:
             self.view.popupmsg("És necessari carregar una imatge")
-        #except:
-            #self.view.popupmsg("És necessari carregar una imatge")
 
     def load_image(self):
         """

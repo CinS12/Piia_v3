@@ -9,6 +9,8 @@ FONT_MSG = ("Verdana", 8)
 
 class EminaBarthel:
     def __init__(self):
+        self.popup_tr_ant = []
+        self.popup_tr_top = []
         return
     def popup_barthel(self, title):
         """
@@ -194,3 +196,81 @@ class EminaBarthel:
         data = self
         pub.sendMessage("EMINA_DATA_SENT", data=data)
         self.popup.destroy()
+
+    def entry_popup_tr_ant(self, title):
+        """
+        Display a popup for antibiotics treatment's comments.
+
+        Parameters
+        ----------
+        title : String
+           title of the widget
+        """
+
+        self.popup = tk.Tk()
+        ws = self.popup.winfo_screenwidth()
+        hs = self.popup.winfo_screenheight()
+        w = 600
+        h = 400
+        x = (ws / 2) - (w / 2)
+        y = (hs / 3) - (h / 3)
+        self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        self.popup.wm_title("Introduïr text")
+        label = ttk.Label(self.popup, text=title, font=FONT_TITOL)
+        label.pack(pady=10)
+        self.tr_ant_text = tk.Text(self.popup, font=FONT_MSG)
+        try:
+            self.tr_ant_text.insert(tk.INSERT, self.popup_tr_ant)
+        except:
+            pass
+        self.tr_ant_text.pack(pady=5, padx=10)
+        button_ok = ttk.Button(self.popup, text="Desar", command=self.p1_tr_ant_ok)
+        button_ok.pack()
+
+    def entry_popup_tr_top(self, title):
+        """
+        Display a popup for topical treatment's comments.
+
+        Parameters
+        ----------
+        title : String
+           title of the widget
+        """
+
+        self.popup = tk.Tk()
+        ws = self.popup.winfo_screenwidth()
+        hs = self.popup.winfo_screenheight()
+        w = 600
+        h = 400
+        x = (ws / 2) - (w / 2)
+        y = (hs / 3) - (h / 3)
+        self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        self.popup.wm_title("Introduïr text")
+        label = ttk.Label(self.popup, text=title, font=FONT_TITOL)
+        label.pack(pady=10)
+        self.tr_top_text = tk.Text(self.popup, font=FONT_MSG)
+        try:
+            self.tr_top_text.insert(tk.INSERT, self.popup_tr_top)
+        except:
+            pass
+        self.tr_top_text.pack(pady=5, padx=10)
+        button_ok = ttk.Button(self.popup, text="Desar", command=self.p1_tr_top_ok)
+        button_ok.pack()
+
+    def p1_tr_top_ok(self):
+        """
+        Saves the topical treatment's comments to an attribute and closes popup.
+        """
+
+        self.popup_tr_top = self.tr_top_text.get(1.0, tk.END)
+        self.popup.destroy()
+        #print(self.popup_res_mic)
+
+    def p1_tr_ant_ok(self):
+        """
+        Saves the antibiotics treatment's comments to an attribute and closes popup.
+        """
+
+        self.popup_tr_ant = self.tr_ant_text.get(1.0, tk.END)
+        self.popup.destroy()
+        #print(self.popup_sit_nutr)

@@ -57,7 +57,7 @@ class ViewSetup:
         self.main_page.page.tkraise()
 
     def go_to_processing_page(self):
-        self.processing_page.page_1.tkraise()
+        self.processing_page.page.tkraise()
 
     def go_to_view_page(self):
         self.view_page.page.tkraise()
