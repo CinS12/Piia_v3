@@ -15,7 +15,7 @@ PATH_IMG_DIR = "resources/Images"
 PATH_IMG_i = "resources/Images/Img_"
 PATH_METADATA_i = "resources/Metadata/Metadata_"
 
-class Data_manager:
+class FileDataManager:
     """
     A class used to manage the files's data reading/writing
     ...
@@ -108,7 +108,6 @@ class Data_manager:
         """
        Checks files's number's and sends it as a request to the Controller
        """
-
         if self.num_files_ok:
             self.check_files()
             #Subtract 1 to the id because directory's files start with 1 and arrays with 0

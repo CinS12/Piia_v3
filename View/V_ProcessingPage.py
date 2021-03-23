@@ -295,3 +295,38 @@ class ProcessingPage:
        """
 
         self.emina_scale.set(data)
+
+    def show_error(self, data_error):
+        """
+        Calls the popup function to display the errors found.
+        Parameters
+        ----------
+        error : list
+           wrong input data field's name
+        """
+
+        if "CODE_ERROR" in data_error:
+            pub.sendMessage("POPUP_MSG", msg="El codi ha de contenir 4 dígits")
+        if "AGE_ERROR" in data_error:
+            pub.sendMessage("POPUP_MSG", msg="L'any de naixement ha de contenir 4 enters")
+        if "N_IMM_ERROR" in data_error:
+            pub.sendMessage("POPUP_MSG", msg="Format no vàlid: Temps d'immobilització")
+        if "N_HOSP_ERROR" in data_error:
+            pub.sendMessage("POPUP_MSG", msg="Format no vàlid: Temps d'hospitalització")
+        if "N_INST_ERROR" in data_error:
+            pub.sendMessage("POPUP_MSG", msg="Format no vàlid: Temps d'institucionalització")
+        if "DATE_ERROR" in data_error:
+            pub.sendMessage("POPUP_MSG", msg="Format no vàlid: Data")
+        if "N_CONTEN_ERROR" in data_error:
+            pub.sendMessage("POPUP_MSG", msg="Format no vàlid: Contenció mecànica")
+
+    def reset_view(self):
+        """
+        Resets image label (after processing process).
+        """
+
+        path = Path(__file__).parent / "../resources/load_img.png"
+        img = ImageTk.PhotoImage(Image.open(path))
+        self.p1_img_label.configure(image=img)
+        self.p1_img_label.image = img
+        self.p1_button_img.grid_forget()

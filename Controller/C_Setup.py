@@ -1,9 +1,8 @@
 from pubsub import pub
 from View import V_Setup
-from data_manager import Data_manager
 from Model.M_PressureImage import Pressure_img
 from Controller import C_Metadata, C_ImagePreSegmentation, C_ImageSegmentation
-from Model import M_MetadataManager, M_ImageReader
+from Model import M_MetadataManager, M_ImageReader, M_FileDataManager
 
 class ControllerSetup:
 
@@ -12,8 +11,8 @@ class ControllerSetup:
         self.model_reader = M_ImageReader.ImageReader()
         self.model_metadata = M_MetadataManager.MetadataManager()
         self.view = V_Setup.ViewSetup(parent)
-        self.data_manager = Data_manager()
         self.metadata = C_Metadata.ControllerMetadata(self.model_metadata, self.view)
+        self.file_data_manager = M_FileDataManager.FileDataManager()
 
         pub.subscribe(self.button_1_pressed, "BUTTON_1_PRESSED")
         pub.subscribe(self.button_2_pressed, "BUTTON_2_PRESSED")
@@ -47,6 +46,18 @@ class ControllerSetup:
 
         pub.subscribe(self.image_accepted, "IMG_ACCEPTED")
 
+        pub.subscribe(self.tot_ple_ko, "TOT_PLE_KO")
+        pub.subscribe(self.data_ko, "DATA_KO")
+        pub.subscribe(self.data_ok, "DATA_OK")
+
+        pub.subscribe(self.data_files_ko, "DATA_FILES_KO")
+        pub.subscribe(self.data_n_elements, "DATA_N_ELEMENTS")
+
+        pub.subscribe(self.ask_image_i, "ASK_IMAGE_i")
+        pub.subscribe(self.load_image_i, "IMAGE_LOAD_i")
+        pub.subscribe(self.load_metadata_i, "METADATA_LOAD_i")
+
+
     def button_1_pressed(self):
         """
         Prints that button_1 from view has been pressed.
@@ -60,8 +71,8 @@ class ControllerSetup:
         load_data from Data_manager.
         """
 
-        print("controller - Botó 2!")
-        self.data_manager.load_data()
+        print("MVC controller - Botó 2!")
+        self.file_data_manager.load_data()
 
     def button_3_pressed(self, data):
         """
@@ -74,16 +85,16 @@ class ControllerSetup:
         """
 
         print("controller - Botó 3!")
-        try:
-            if self.pressure_img.loaded:
-                if self.pressure_img.processed:
-                    self.model_metadata.getData(data)
-                else:
-                    self.view.popupmsg("És necessari processar la imatge.")
+        #try:
+        if self.pressure_img.loaded:
+            if self.pressure_img.processed:
+                self.model_metadata.getData(data)
             else:
-                self.view.popupmsg("És necessari carregar una imatge")
-        except:
+                self.view.popupmsg("És necessari processar la imatge.")
+        else:
             self.view.popupmsg("És necessari carregar una imatge")
+        #except:
+            #self.view.popupmsg("És necessari carregar una imatge")
 
     def load_image(self):
         """
@@ -326,3 +337,95 @@ class ControllerSetup:
         self.pressure_img.close_all()
         self.view.processing_page.update_main_label(self.pressure_img.mask)
         self.pressure_img.processed = True
+
+    def tot_ple_ko(self):
+        """
+        Calls a View function to warn the user that all metadata fields must be filled.
+        """
+
+        print("controller - tot_ple_ko!")
+        self.view.popupmsg("S'han d'omplir tots els camps")
+    def data_ko(self, error):
+        """
+        Calls a View function to warn the user what field has the wrong input data.
+        Parameters
+        ----------
+        error : list
+           wrong input data field's name
+        """
+
+        self.view.processing_page.show_error(error)
+        print("controller - data_ko")
+
+    def data_ok(self):
+        """
+        Sets Pressure_img loaded boolean to False.
+        Calls View function to reset loaded image label.
+        Calls the function to save all the data entered by the user.
+        """
+
+        print("controller - data_ok")
+        self.pressure_img.loaded = False
+        self.view.processing_page.reset_view()
+        try:
+            self.file_data_manager.save_data(self.model_metadata.metadata, self.pressure_img)
+            self.view.popupmsg("Procés finalitzat amb èxit. Prem OK per continuar.")
+        except:
+            self.view.popupmsg("Error de gestió de fitxers.")
+
+    def data_files_ko(self):
+        """
+        Calls the View function to warn the user about a file manager error.
+        """
+
+        print("controller - data_files_ko")
+        self.view.popupmsg("Error de gestió dels fitxers.")
+
+    def data_n_elements(self, num):
+        """
+        Calls the View function to update the element's label counter with a new value.
+        Parameters
+        ----------
+        num : int
+           number of images found in the storage directory
+        """
+
+        print("controller - data_n_elements")
+        self.view.view_page.update_data_n_elements(num)
+
+    def ask_image_i(self, i):
+        """
+        Calls the Data_manager functions to read and load the image and metadata "i".
+        Parameters
+        ----------
+        i : int
+           id of the image and metadata that have to be read
+        """
+
+        print("controller - ask_img_i")
+        self.file_data_manager.load_img_i(i)
+        self.file_data_manager.load_metadata_i(i)
+
+    def load_image_i(self, img_tk):
+        """
+        Calls the View function to load the image_tk to the p2_label_img.
+        Parameters
+        ----------
+        img_tk : PIL Image
+           image ready to be loaded to a label
+        """
+
+        print("controller - load_img_i")
+        self.view.view_page.load_image_i(img_tk)
+
+    def load_metadata_i(self, metadata):
+        """
+        Calls the View function to load the metadata to the p2_label_metadata.
+        Parameters
+        ----------
+        metadata : JSON Object
+           data sent to be loaded into a label
+        """
+
+        print("controller - load_metadata_i")
+        self.view.view_page.load_metadata_i(metadata)

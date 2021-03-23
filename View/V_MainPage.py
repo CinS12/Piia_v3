@@ -41,5 +41,5 @@ class MainPage:
         """
         Shows page_2 UI (View images).
         """
-
+        pub.sendMessage("BUTTON_2_PRESSED")
         pub.sendMessage("GO_TO_VIEW_PAGE")

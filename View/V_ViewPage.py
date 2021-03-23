@@ -67,3 +67,66 @@ class ViewPage:
 
     def tornar_main(self):
         pub.sendMessage("BACK_TO_MAIN_PAGE")
+
+
+    def update_data_n_elements(self, num):
+        """
+        Updates the label_info of page 2
+        with the number of elements found in the storage directory.
+        Parameters
+        ----------
+        num : int
+           number of images found in the storage directory
+        """
+
+        self.p2_label_info.config(text="Elements trobats: "+str(num))
+        self.update_list(num)
+
+    def update_list(self, num):
+        """
+        Displays all found elements on the list.
+        Creates the "double click" event to select an element.
+        """
+
+        self.llista.delete(0, tk.END)
+        for i in range(num):
+            self.llista.insert(tk.END, "Imatge: "+str(i+1))
+        self.llista.bind('<Double-1>', self.select_element)
+
+    def select_element(self, event):
+        """
+        Sends the request with the id of list's selected element.
+        Parameters
+        ----------
+        event : event
+           event from the mouse
+        """
+
+        n_elements = self.llista.curselection()
+        for i in n_elements:
+            pub.sendMessage("ASK_IMAGE_i", i=i+1)
+
+    def load_image_i(self, img_tk):
+        """
+        Loads the image to the label_img of page 2 (View images).
+        Parameters
+        ----------
+        img_tk : PIL Image
+           image ready to be loaded to a label
+        """
+
+        self.p2_label_img.configure(image=img_tk)
+        self.p2_label_img.image = img_tk
+
+    def load_metadata_i(self, metadata):
+        """
+        Loads the metadata to the metadata labels of page 2 (View images).
+        Parameters
+        ----------
+        metadata : JSON Object
+           data sent to be loaded into a label
+        """
+        self.p2_frame_metadata.configure(borderwidth = 2, relief = "groove")
+        self.p2_label_metadata_code.config(text="Codi: "+metadata["metadata"]["code"])
+        self.p2_label_metadata_grade.config(text="Grau: " + metadata["metadata"]["grade"])
+        self.p2_label_metadata_cm.config(text="Perímetre: " + str(metadata["perimetre_cm"])+" cm")

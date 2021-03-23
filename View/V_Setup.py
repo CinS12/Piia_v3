@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from pubsub import pub
-from View import V_MainPage, V_ProcessingPage, V_ViewPage, V_PreSegmentationGUI, V_SegmentationGUI, V_EminaBarthel
+from View import V_MainPage, V_ProcessingPage, V_ViewPage, V_PreSegmentationGUI, V_SegmentationGUI
 
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
@@ -18,6 +18,7 @@ class ViewSetup:
         pub.subscribe(self.back_to_main_page, "BACK_TO_MAIN_PAGE")
         pub.subscribe(self.go_to_processing_page, "GO_TO_PROCESSING_PAGE")
         pub.subscribe(self.go_to_view_page, "GO_TO_VIEW_PAGE")
+        pub.subscribe(self.popupmsg, "POPUP_MSG")
         return
 
     def setup(self):
@@ -60,7 +61,6 @@ class ViewSetup:
 
     def go_to_view_page(self):
         self.view_page.page.tkraise()
-        #self.data_manager.load_data()
 
     def popupmsg(self, msg):
         """
@@ -86,3 +86,31 @@ class ViewSetup:
         button1 = ttk.Button(popup, text="Ok", command=popup.destroy)
         button1.pack()
         popup.mainloop()
+
+    def data_ko(self, error):
+        """
+        Calls a View function to warn the user what field has the wrong input data.
+        Parameters
+        ----------
+        error : list
+           wrong input data field's name
+        """
+
+        self.view.show_error(error)
+        print("controller - data_ko")
+
+    def data_ok(self):
+        """
+        Sets Pressure_img loaded boolean to False.
+        Calls View function to reset loaded image label.
+        Calls the function to save all the data entered by the user.
+        """
+
+        print("controller - data_ok")
+        self.pressure_img.loaded = False
+        self.view.reset_view()
+        try:
+            self.save_data_file()
+            self.view.popupmsg("Procés finalitzat amb èxit. Prem OK per continuar.")
+        except:
+            self.view.popupmsg("Error de gestió de fitxers.")
