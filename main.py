@@ -1,6 +1,5 @@
 import tkinter as tk
 import ctypes
-from Controller import Controller
 import Controller.C_Setup as C_Setup
 
 if __name__ == "__main__":

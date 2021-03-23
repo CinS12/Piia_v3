@@ -4,6 +4,8 @@ from pubsub import pub
 from pathlib import Path
 from PIL import ImageTk, Image
 from tkcalendar import DateEntry
+from View import V_EminaBarthel
+import cv2
 
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
@@ -15,6 +17,7 @@ class ProcessingPage:
         self.container = parent
         self.crear_processing()
         self.inserir_processing()
+        self.emina_barthel = V_EminaBarthel.EminaBarthel()
         return
 
     def crear_processing(self,):
@@ -26,7 +29,7 @@ class ProcessingPage:
         self.p1_label_1 = ttk.Label(self.page_1, text="Processar imatges", font=FONT_BENVINGUDA)
         self.p1_button_1 = ttk.Button(self.page_1, text="Carrega imatge", command=self.carregar_imatge)
         self.p1_button_2 = ttk.Button(self.page_1, text="Enrere", command=self.tornar_main)
-        self.p1_button_img = ttk.Button(self.page_1, text="Processar imatge", command=lambda:self.processar_img())
+        self.p1_button_img = ttk.Button(self.page_1, text="Processar imatge", command=self.processar_img)
         path = Path(__file__).parent / "../resources/load_img.png"
         img = ImageTk.PhotoImage(Image.open(path))
         self.p1_img_label = tk.Label(self.page_1, image=img)
@@ -130,7 +133,7 @@ class ProcessingPage:
         self.emina_scale = tk.Scale(self.p1_data_camps, from_=0, to=15, resolution=1, orient=tk.HORIZONTAL)
         self.emina_scale.grid(row=10, column=2, padx=0, pady=10)
         barthel_button = ttk.Button(self.p1_data_camps, text="Calcular",
-                                    command=lambda: self.popup_emina("Escala EMINA"))
+                                    command=lambda: self.emina_barthel.popup_emina("Escala EMINA"))
         barthel_button.grid(row=10, column=3, pady=10, padx=0)
         #Escala Barthel
         barthel_label = ttk.Label(self.p1_data_camps, text="Escala Barthel", font=FONT_MSG)
@@ -138,7 +141,7 @@ class ProcessingPage:
         self.barthel_scale = tk.Scale(self.p1_data_camps, from_=0, to=100, resolution=1, orient=tk.HORIZONTAL)
         self.barthel_scale.grid(row=11, column=2, padx=0, pady=10)
         barthel_button = ttk.Button(self.p1_data_camps, text="Calcular",
-                                    command=lambda: self.popup_barthel("Escala Barthel"))
+                                    command=lambda: self.emina_barthel.popup_barthel("Escala Barthel"))
         barthel_button.grid(row=11, column=3, pady=10, padx=0)
         #Contenció mecànica
         self.contencio=""
@@ -187,14 +190,15 @@ class ProcessingPage:
         tr_label = ttk.Label(self.p1_data_camps, text="Tractament", font=FONT_MSG)
         tr_label.grid(row=18, column=1, padx=5, pady=10)
         tr_ant_button = ttk.Button(self.p1_data_camps, text="Antibiòtic",
-                                     command=lambda: self.entry_popup_tr_ant("Antibiòtic"))
+                                     command=lambda: self.emina_barthel.entry_popup_tr_ant("Antibiòtic"))
         tr_ant_button.grid(row=18, column=2, pady=10, padx=0, sticky="e")
         tr_top_button = ttk.Button(self.p1_data_camps, text="Tòpic",
-                                   command=lambda: self.entry_popup_tr_top(
+                                   command=lambda: self.emina_barthel.entry_popup_tr_top(
                                        "Tòpic"))
         tr_top_button.grid(row=18, column=3, pady=10, padx=0)
         #Submit
         self.p1_button_3 = ttk.Button(self.p1_data_frame, text="Guardar", command=self.apretar_boto_3)
+
 
     def ask_time(self):
         """
@@ -262,3 +266,32 @@ class ProcessingPage:
         """
 
         self.p1_button_img.grid(row=1, column=1, pady=0, padx=20, sticky="SE")
+
+    def update_main_label(self, img_tk):
+        img_mask_rgb = cv2.cvtColor(img_tk, cv2.COLOR_BGR2RGB)
+        img_mask = Image.fromarray(img_mask_rgb)
+        img_mask_tk = ImageTk.PhotoImage(image=img_mask)
+        self.p1_img_label.configure(image=img_mask_tk)
+        self.p1_img_label.image = img_mask_tk
+
+    def update_barthel(self, data):
+        """
+        Updates barthel's Scale widget with the calculated value.
+        Parameters
+        ----------
+        data : int
+            value of the barthel scale
+       """
+
+        self.barthel_scale.set(data)
+
+    def update_emina(self, data):
+        """
+        Updates emina's Scale widget with the calculated value.
+        Parameters
+        ----------
+        data : int
+            value of the emina scale
+       """
+
+        self.emina_scale.set(data)

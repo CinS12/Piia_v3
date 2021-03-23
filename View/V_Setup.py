@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from pubsub import pub
-from View import V_MainPage, V_ProcessingPage, V_ViewPage, V_PreSegmentationGUI, V_SegmentationGUI
+from View import V_MainPage, V_ProcessingPage, V_ViewPage, V_PreSegmentationGUI, V_SegmentationGUI, V_EminaBarthel
 
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
@@ -24,15 +24,13 @@ class ViewSetup:
         """
         Calls the functions to create and show the main window.
         """
-        self.main = V_MainPage.MainPage(self.container)
-        self.processing = V_ProcessingPage.ProcessingPage(self.container)
-        self.view = V_ViewPage.ViewPage(self.container)
+        self.main_page = V_MainPage.MainPage(self.container)
+        self.processing_page = V_ProcessingPage.ProcessingPage(self.container)
+        self.view_page = V_ViewPage.ViewPage(self.container)
         self.pre_processing_gui = V_PreSegmentationGUI.PreSegmentationGUI(self.container)
         self.processing_gui = V_SegmentationGUI.SegmentationGUI(self.container)
-        #self.crear_finestres()
-        #self.inserir_finestres()
         self.crear_menu()
-        self.main.page.tkraise()
+        self.main_page.page.tkraise()
 
     def crear_menu(self):
         """
@@ -55,13 +53,13 @@ class ViewSetup:
         self.container.config(menu=self.menubar)
 
     def back_to_main_page(self):
-        self.main.page.tkraise()
+        self.main_page.page.tkraise()
 
     def go_to_processing_page(self):
-        self.processing.page_1.tkraise()
+        self.processing_page.page_1.tkraise()
 
     def go_to_view_page(self):
-        self.view.page.tkraise()
+        self.view_page.page.tkraise()
         #self.data_manager.load_data()
 
     def popupmsg(self, msg):

@@ -1,15 +1,19 @@
+
 """Main code and packages manager
 sectionauthor:: Artur Martí Gelonch <artur.marti@students.salle.url.edu>
 Tool that allows the connection between the View and Model.
 Handles all the incoming requests.
 """
+import ctypes
 
-#from View import View
-#from Model import Model
-from Model.pressure_image import Pressure_img
+from piiaView import View
+from piiaModel import Model
+from Model.M_PressureImage import Pressure_img
 from data_manager import Data_manager
 from pubsub import pub
 
+import tkinter as tk
+from tkinter import ttk
 
 class Controller:
     """
@@ -225,7 +229,6 @@ class Controller:
         image_tk : PIL Image
            image ready to be loaded in a label
         """
-
         self.pressure_img = Pressure_img()
         self.pressure_img.img_origin = image_original
         self.pressure_img.loaded = True
@@ -653,7 +656,7 @@ class Controller:
     def target_not_found(self):
         print("controller - target_not_found")
         self.view.popupmsg("Atenció. No s'ha trobat el target!")
-"""
+
 if __name__ == "__main__":
     root = tk.Tk()
     user32 = ctypes.windll.user32
@@ -673,4 +676,3 @@ if __name__ == "__main__":
 
     app = Controller(root)
     root.mainloop()
-"""

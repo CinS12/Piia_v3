@@ -215,7 +215,7 @@ class View:
         self.p1_label_1 = ttk.Label(self.page_1, text="Processar imatges", font=FONT_BENVINGUDA)
         self.p1_button_1 = ttk.Button(self.page_1, text="Carrega imatge", command=self.carregar_imatge)
         self.p1_button_2 = ttk.Button(self.page_1, text="Enrere", command=lambda:self.page_0.tkraise())
-        self.p1_button_img = ttk.Button(self.page_1, text="Processar imatge", command=lambda:self.processar_img())
+        self.p1_button_img = ttk.Button(self.page_1, text="Processar imatge", command=self.processar_img)
         path = Path(__file__).parent / "resources/load_img.png"
         img = ImageTk.PhotoImage(Image.open(path))
         self.p1_img_label = tk.Label(self.page_1, image=img)

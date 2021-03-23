@@ -48,7 +48,6 @@ class ImageReader:
             self.im_p1 = ImageTk.Image.fromarray(self.img)
             self.imgtk_p1 = ImageTk.PhotoImage(image=self.im_p1)
             pub.sendMessage("IMAGE_LOADED", image_original=img_original, image_tk=self.imgtk_p1)
-            return path
 
     def check_img_size(self, img):
         """

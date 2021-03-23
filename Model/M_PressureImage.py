@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 from peakdetect import peakdetect
 from pubsub import pub
-from target_detector import TargetDetector
+from Model.M_TargetDetector import TargetDetector
 
 class Pressure_img:
     """

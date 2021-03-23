@@ -12,6 +12,7 @@ class ControllerMetadata:
         pub.subscribe(self.emina_data_sent, "EMINA_DATA_SENT")
         pub.subscribe(self.update_emina, "UPDATE_EMINA")
         pub.subscribe(self.error_emina, "ERROR_EMINA")
+        return
 
     def barthel_data_sent(self, data):
         """
@@ -47,7 +48,7 @@ class ControllerMetadata:
        """
 
         print("controller - update_barthel")
-        self.view.update_barthel(data)
+        self.view.processing_page.update_barthel(data)
 
     def update_emina(self, data):
         """
@@ -59,7 +60,7 @@ class ControllerMetadata:
        """
 
         print("controller - update_emina")
-        self.view.update_emina(data)
+        self.view.processing_page.update_emina(data)
 
     def error_barthel(self):
         """
