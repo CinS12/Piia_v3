@@ -2,14 +2,12 @@ from pubsub import pub
 import cv2
 class ControllerImagePreSegmentation:
 
-    def __init__(self, view, pressure_img):
+    def __init__(self, view):
         self.view = view
         self.pressure_img = None
-        self.pressure_img = pressure_img if pressure_img is not None else None
-        #self.pressure_img = pressure_img
-        #pub.subscribe(self.analyse_image, "ANALYSE_IMAGE")
-        #pub.subscribe(self.ask_mask_confirmation, "ASK_MASK_CONFIRMATION")
-        #pub.subscribe(self.pre_segmentation_confirmated, "PRE_SEGMENTATION_CONFIRMATED")
+        pub.subscribe(self.analyse_image, "ANALYSE_IMAGE")
+        pub.subscribe(self.ask_mask_confirmation, "ASK_MASK_CONFIRMATION")
+        pub.subscribe(self.pre_segmentation_confirmated, "PRE_SEGMENTATION_CONFIRMATED")
 
     def analyse_image(self):
         """

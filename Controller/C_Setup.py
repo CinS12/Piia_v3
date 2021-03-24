@@ -7,27 +7,21 @@ from Model import M_MetadataManager, M_ImageReader, M_FileDataManager
 class ControllerSetup:
 
     def __init__(self, parent):
+        self.pressure_img = None
         self.parent = parent
         self.model_reader = M_ImageReader.ImageReader()
         self.model_metadata = M_MetadataManager.MetadataManager()
         self.view = V_Setup.ViewSetup(parent)
         self.metadata = C_Metadata.ControllerMetadata(self.model_metadata, self.view)
         self.file_data_manager = M_FileDataManager.FileDataManager()
+        self.img_pre_segmentation = C_ImagePreSegmentation.ControllerImagePreSegmentation(self.view)
+        self.img_segmentation = C_ImageSegmentation.ControllerImageSegmentation(self.view)
 
         pub.subscribe(self.button_1_pressed, "BUTTON_1_PRESSED")
         pub.subscribe(self.button_2_pressed, "BUTTON_2_PRESSED")
         pub.subscribe(self.button_3_pressed, "BUTTON_3_PRESSED")
         pub.subscribe(self.load_image, "LOAD_IMAGE")
         pub.subscribe(self.image_loaded, "IMAGE_LOADED")
-
-        pub.subscribe(self.analyse_image, "ANALYSE_IMAGE")
-        pub.subscribe(self.ask_mask_confirmation, "ASK_MASK_CONFIRMATION")
-        pub.subscribe(self.pre_segmentation_confirmated, "PRE_SEGMENTATION_CONFIRMATED")
-
-        pub.subscribe(self.segmentation_gui, "SEGMENTATION_GUI")
-        pub.subscribe(self.whitebalance, "WHITEBALANCE")
-        pub.subscribe(self.whitebalance_confirmated, "WHITEBALANCE_CONFIRMATED")
-        pub.subscribe(self.ask_perimeter, "ASK_PERIMETER")
 
         pub.subscribe(self.target_not_found, "TARGET_NOT_FOUND")
 
@@ -88,6 +82,7 @@ class ControllerSetup:
         try:
             if self.pressure_img.loaded:
                 if self.pressure_img.processed:
+                    self.file_data_manager.load_data()
                     self.model_metadata.getData(data)
                 else:
                     self.view.popupmsg("És necessari processar la imatge.")
@@ -115,120 +110,14 @@ class ControllerSetup:
         image_tk : PIL Image
            image ready to be loaded in a label
         """
-        self.pressure_img = Pressure_img()
+        pressure_img = Pressure_img()
+        self.pressure_img = pressure_img
         self.pressure_img.img_origin = image_original
         self.pressure_img.loaded = True
         self.view.processing_page.update_image(image_tk)
         self.view.processing_page.botoImg()
-        #self.pre_processing = C_ImagePreSegmentation.ControllerImagePreSegmentation(self.view, self.pressure_img)
-        #self.processing = C_ImageSegmentation.ControllerImageSegmentation(self.view, self.pressure_img)
-
-        # PRE-SEGMENTATION
-
-    def analyse_image(self):
-        """
-        Checks if Pressure_img has been processed and calls processing function if not.
-        """
-        print("MVC controller - analyse_image!")
-        if self.pressure_img.processed == False:
-            self.pressure_img.crop_image(self.pressure_img.img_origin)
-        else:
-            self.view.popupmsg("La imatge ja ha estat processada.")
-
-    def ask_mask_confirmation(self, img_cv2_mask, scale_factor):
-        """
-        Calls the View function to ask user confirmation about an image's mask.
-        Parameters
-        ----------
-        img_cv2_mask : image cv2
-           image that requires user confirmation
-        scale_factor : int
-           image resize value (default = 100)
-        """
-
-        print("MVC controller - ask_mask_confirmation!")
-        try:
-            self.view.pre_processing_gui.ask_mask_confirmation(img_cv2_mask, scale_factor)
-        except:
-            self.view.popupmsg("Alguna cosa ha fallat. Torna-ho a intentar!")
-
-    def pre_segmentation_confirmated(self, img_imgtk_mask, img_cv2_mask):
-        """
-        Calls the Pressure_img function for the first image segmentation.
-        Parameters
-        ----------
-        img_imgtk_mask : PIL Image
-           image before cropping roi
-        img_cv2_mask : image cv2
-           image that requires user confirmation
-        """
-        print("controller - pre_segmentation_confirmated!")
-        scale_factor = 100
-        self.pressure_img.begin_segmentation(img_imgtk_mask=img_imgtk_mask, img_cv2_mask=img_cv2_mask,
-                                             scale_factor=scale_factor)
-
-    #SEGMENTATION
-
-    def segmentation_gui(self, img_imgtk_mask, img_cv2_mask):
-        """
-        Updates the Pressure_img mask image, calls the target_detection process and calls the View UI for processing.
-        Parameters
-        ----------
-        img_imgtk_mask : PIL Image BGR
-           image before cropping roi
-        img_cv2_mask : image cv2 BGR
-           image that requires user confirmation
-        """
-        print("controller - segmentation_gui!")
-        self.pressure_img.close_all()
-        self.pressure_img.mask = img_cv2_mask
-        self.view.processing_gui.segmentation_gui(img_imgtk_mask, img_cv2_mask)
-
-    def whitebalance(self, img_cv2_mask):
-        """
-        Checks if flash reduction has been called and calls
-        Pressure_img function to reduce flash if not.
-        Calls the View function to ask user confirmation.
-        Parameters
-        ----------
-        img_cv2_mask : image cv2
-           image selected by user to reduce its flash
-        """
-
-        print("controller - whitebalance!")
-        if self.pressure_img.whitebalanced == False:
-                img_whitebalanced = self.pressure_img.target_detector.whiteBalance()
-                self.view.processing_gui.ask_whitebalance_confirmation(img_cv2_mask, img_whitebalanced)
-        else:
-            self.view.popupmsg("Ja s'ha aplicat la reducció.")
-
-    def whitebalance_confirmated(self, img_cv2_whitebalanced):
-        """
-        Updates Pressure_img mask and flash_reduced boolean.
-        Calls the View function to update image label.
-        Parameters
-        ----------
-        img_cv2_mask : image cv2
-           image selected and validated by user to reduce its flash
-        """
-
-        print("controller - whitebalance_confirmated!")
-        self.pressure_img.whitebalanced = True
-        self.pressure_img.mask = img_cv2_whitebalanced
-        self.pressure_img.img = img_cv2_whitebalanced.copy()
-        self.view.processing_gui.update_whitebalanced_label(img_cv2_whitebalanced)
-
-    def ask_perimeter(self):
-        """
-        Checks if perimeter has been cropped and calls the Pressure_img function if not.
-        """
-
-        print("controller - ask_perimeter!")
-        img_cv2_mask = self.pressure_img.mask
-        if self.pressure_img.perimetre_done:
-            self.view.popupmsg("El perímetre ja ha estat seleccionat")
-        else:
-            self.pressure_img.roi_crop(img_cv2_mask, "Perimeter")
+        self.img_pre_segmentation.pressure_img = self.pressure_img
+        self.img_segmentation.pressure_img = self.pressure_img
 
     def target_not_found(self):
         print("controller - target_not_found")

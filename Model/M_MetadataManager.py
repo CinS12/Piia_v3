@@ -379,7 +379,6 @@ class MetadataManager:
         humitat = data.humitat_combobox.current()
         nutricio = data.nutricio_combobox.current()
         activitat = data.activitat_combobox.current()
-
         if (mental == -1 or movilitat == -1 or humitat == -1 or nutricio == -1 or activitat == -1):
             totOk = False
         else:

@@ -103,7 +103,6 @@ class FileDataManager:
             self.num_files_ok = False
         else:
             self.id = n_img + 1
-
     def load_data(self):
         """
        Checks files's number's and sends it as a request to the Controller
