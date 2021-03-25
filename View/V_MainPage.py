@@ -1,19 +1,19 @@
 import tkinter as tk
 from tkinter import ttk
 from pubsub import pub
-
+from View.V_Page import Page
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
 FONT_MSG = ("Verdana", 8)
 
 
-class MainPage:
+class MainPage(Page):
     def __init__(self, parent):
         self.container = parent
-        self.elements_main_page()
+        self.elements_page()
         return
 
-    def elements_main_page(self):
+    def elements_page(self):
         """
         Creates the frame and main labels of page_0's UI (Main Menu).
         """

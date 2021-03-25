@@ -6,21 +6,21 @@ from PIL import ImageTk, Image
 from tkcalendar import DateEntry
 from View import V_EminaBarthel
 import cv2
-
+from View.V_Page import Page
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
 FONT_MSG = ("Verdana", 8)
 
 
-class ProcessingPage:
+class ProcessingPage(Page):
     def __init__(self, parent):
         self.container = parent
         self.page = tk.Frame(self.container)
-        self.elements_processing()
+        self.elements_page()
         self.emina_barthel = V_EminaBarthel.EminaBarthel()
         return
 
-    def elements_processing(self,):
+    def elements_page(self):
         """
         Creates the frame and main labels of page_1's UI (Process images).
         """
