@@ -5,7 +5,7 @@ import tkinter as tk
 class Page(ABC):
 
     def __init__(self):
-        self.container = NotImplemented
+        self.container: tk.Tk = NotImplemented
         self.page: tk.Frame = NotImplemented
         return
 

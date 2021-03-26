@@ -2,6 +2,10 @@
 sectionauthor:: Artur Martí Gelonch <artur.marti@students.salle.url.edu>
 WARNING: choose language options still in development (no functional).
 """
+#MAIN PAGE
+MAIN_TITLE = "Anotació d'imatges d'úlceres de pressió"
+BUTTON_1 = "Processar imatges"
+BUTTON_2 = "Visualitzar imatges"
 # Source: (https://ca.wikipedia.org/wiki/Escala_de_Barthel)
 BARTHEL_DESCRIPTION = "Escala ordinal utilitzada per mesurar l'acompliment en activitats de la vida diària bàsiques (AVDB)."
 # Source: (https://www.murciasalud.es/preevid/1103)
