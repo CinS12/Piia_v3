@@ -3,19 +3,14 @@ from View import V_Setup
 from Model.M_PressureImage import Pressure_img
 from Controller import C_Metadata, C_ImagePreSegmentation, C_ImageSegmentation
 from Model import M_MetadataManager, M_ImageReader, M_FileDataManager
+from Controller import C_LanguageSelection
 
 class ControllerSetup:
-
     def __init__(self, parent):
-        self.pressure_img = None
         self.parent = parent
-        self.model_reader = M_ImageReader.ImageReader()
-        self.model_metadata = M_MetadataManager.MetadataManager()
-        self.view = V_Setup.ViewSetup(parent)
-        self.metadata = C_Metadata.ControllerMetadata(self.model_metadata, self.view)
-        self.file_data_manager = M_FileDataManager.FileDataManager()
-        self.img_pre_segmentation = C_ImagePreSegmentation.ControllerImagePreSegmentation(self.view)
-        self.img_segmentation = C_ImageSegmentation.ControllerImageSegmentation(self.view)
+        self.pressure_img = None
+        C_LanguageSelection.LanguageSelection(self.parent)
+        self.setup()
 
         pub.subscribe(self.button_1_pressed, "BUTTON_1_PRESSED")
         pub.subscribe(self.button_2_pressed, "BUTTON_2_PRESSED")
@@ -36,6 +31,14 @@ class ControllerSetup:
         pub.subscribe(self.load_image_i, "IMAGE_LOAD_i")
         pub.subscribe(self.load_metadata_i, "METADATA_LOAD_i")
 
+    def setup(self):
+        self.model_reader = M_ImageReader.ImageReader()
+        self.model_metadata = M_MetadataManager.MetadataManager()
+        self.view = V_Setup.ViewSetup(self.parent)
+        self.metadata = C_Metadata.ControllerMetadata(self.model_metadata, self.view)
+        self.file_data_manager = M_FileDataManager.FileDataManager()
+        self.img_pre_segmentation = C_ImagePreSegmentation.ControllerImagePreSegmentation(self.view)
+        self.img_segmentation = C_ImageSegmentation.ControllerImageSegmentation(self.view)
 
     def button_1_pressed(self):
         """

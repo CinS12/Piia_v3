@@ -90,13 +90,11 @@ class ViewPage(Page):
             self.llista.insert(tk.END, "Imatge: "+str(i+1))
         self.llista.bind('<Double-1>', self.select_element)
 
-    def select_element(self, event):
+    def select_element(self):
         """
         Sends the request with the id of list's selected element.
         Parameters
         ----------
-        event : event
-           event from the mouse
         """
 
         n_elements = self.llista.curselection()
