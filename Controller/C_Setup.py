@@ -37,11 +37,10 @@ class ControllerSetup:
         pub.subscribe(self.load_image_i, "IMAGE_LOAD_i")
         pub.subscribe(self.load_metadata_i, "METADATA_LOAD_i")
 
-        C_LanguageSelection.LanguageSelection(self.parent)
+        self.language_manager = C_LanguageSelection.LanguageSelection(self.parent)
 
 
-
-    def setup_lang_asked(self):
+    def setup_lang_asked(self, lang):
         self.parent.destroy()
         self.parent = tk.Tk()
         self.parent.title("PIIA")
@@ -49,17 +48,17 @@ class ControllerSetup:
 
         self.model_reader = M_ImageReader.ImageReader()
         self.model_metadata = M_MetadataManager.MetadataManager()
-        self.view = V_Setup.ViewSetup(self.parent)
+        self.view = V_Setup.ViewSetup(self.parent, lang)
         self.metadata = C_Metadata.ControllerMetadata(self.model_metadata, self.view)
         self.file_data_manager = M_FileDataManager.FileDataManager()
         self.img_pre_segmentation = C_ImagePreSegmentation.ControllerImagePreSegmentation(self.view)
         self.img_segmentation = C_ImageSegmentation.ControllerImageSegmentation(self.view)
         self.parent.mainloop()
 
-    def setup_lang_loaded(self):
+    def setup_lang_loaded(self, lang):
         self.model_reader = M_ImageReader.ImageReader()
         self.model_metadata = M_MetadataManager.MetadataManager()
-        self.view = V_Setup.ViewSetup(self.parent)
+        self.view = V_Setup.ViewSetup(self.parent, lang)
         self.metadata = C_Metadata.ControllerMetadata(self.model_metadata, self.view)
         self.file_data_manager = M_FileDataManager.FileDataManager()
         self.img_pre_segmentation = C_ImagePreSegmentation.ControllerImagePreSegmentation(self.view)

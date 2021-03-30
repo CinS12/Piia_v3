@@ -8,11 +8,12 @@ from abc import ABC, abstractmethod
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
 FONT_MSG = ("Verdana", 8)
-
+import language_ENG, language_CAT, language_CAST
 class ViewSetup:
 
-    def __init__(self, parent):
+    def __init__(self, parent, lang):
         self.container = parent
+        self.lang = lang
         parent.grid_columnconfigure(0, weight=1)
         parent.grid_rowconfigure(0, weight=1)
         self.setup()
@@ -27,7 +28,14 @@ class ViewSetup:
         """
         Calls the functions to create and show the main window.
         """
-        self.main_page = V_MainPage.MainPage(self.container)
+        if self.lang == 0:
+            self.lang = language_CAT.LangCAT()
+        if self.lang == 1:
+            self.lang = language_CAST.LangCAST()
+        if self.lang ==2:
+            self.lang = language_ENG.LangENG()
+
+        self.main_page = V_MainPage.MainPage(self.container, self.lang)
         self.processing_page = V_ProcessingPage.ProcessingPage(self.container)
         self.view_page = V_ViewPage.ViewPage(self.container)
         self.pre_processing_gui = V_PreSegmentationGUI.PreSegmentationGUI(self.container)
@@ -49,11 +57,14 @@ class ViewSetup:
         self.menubar.add_cascade(label="File", menu=self.file_menu)
 
         language_menu = tk.Menu(self.menubar, tearoff=0)
-        language_menu.add_command(label="Català", command=lambda: self.popupmsg("Pàgina en construcció!"))
-        language_menu.add_command(label="Castellano", command=lambda: self.popupmsg("Página en construcción!"))
-        language_menu.add_command(label="English", command=lambda: self.popupmsg("Page is still building!"))
+        language_menu.add_command(label="Català", command=lambda: self.change_lang(0))
+        language_menu.add_command(label="Castellano", command=lambda: self.change_lang(1))
+        language_menu.add_command(label="English", command=lambda: self.change_lang(2))
         self.menubar.add_cascade(label="Language", menu=language_menu)
         self.container.config(menu=self.menubar)
+
+    def change_lang(self, lang):
+        pub.sendMessage("CHANGE_LANG", lang=lang)
 
     def back_to_main_page(self):
         self.main_page.page.tkraise()

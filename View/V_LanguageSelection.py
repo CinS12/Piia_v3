@@ -1,3 +1,4 @@
+import sys
 import tkinter as tk
 from tkinter import ttk
 from pubsub import pub
@@ -37,3 +38,20 @@ class ViewLanguageSelection():
 
     def lang_selected(self, lang):
         pub.sendMessage("LANG_SELECTED", lang=lang)
+
+    def lang_changed(self):
+        popup = tk.Toplevel()
+        ws = popup.winfo_screenwidth()
+        hs = popup.winfo_screenheight()
+        w = 300
+        h = 75
+        x = (ws / 2) - (w / 2)
+        y = (hs / 3) - (h / 3)
+        popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
+        popup.wm_title("Atenció")
+        label = ttk.Label(popup, text="Change language? Program reset required.", font=FONT_MSG)
+        label.configure(anchor="center")
+        label.pack(side="top", fill="x", pady=10)
+        button1 = ttk.Button(popup, text="Accept", command=sys.exit)
+        button1.pack()
+        popup.mainloop()

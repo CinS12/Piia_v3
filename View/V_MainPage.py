@@ -8,8 +8,9 @@ FONT_MSG = ("Verdana", 8)
 
 
 class MainPage(Page):
-    def __init__(self, parent):
+    def __init__(self, parent, lang):
         self.container = parent
+        self.lang = lang
         self.elements_page()
         return
 
@@ -19,9 +20,9 @@ class MainPage(Page):
         """
 
         self.page = tk.Frame(self.container)
-        p0_label_0 = ttk.Label(self.page, text="Pressure Injuries Image Analysis", font=FONT_BENVINGUDA)
-        p0_button_1 = ttk.Button(self.page, text="Processar imatges", command=self.apretar_boto_1)
-        p0_button_2 = ttk.Button(self.page, text="Visualitzar imatges", command=self.apretar_boto_2)
+        p0_label_0 = ttk.Label(self.page, text=self.lang.MAIN_TITLE, font=FONT_BENVINGUDA)
+        p0_button_1 = ttk.Button(self.page, text=self.lang.BUTTON_1, command=self.apretar_boto_1)
+        p0_button_2 = ttk.Button(self.page, text=self.lang.BUTTON_2, command=self.apretar_boto_2)
 
         self.page.grid(row=0, column=0, sticky="NESW")
         p0_label_0.pack(pady=20)

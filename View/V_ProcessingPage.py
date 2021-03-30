@@ -10,7 +10,7 @@ from View.V_Page import Page
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
 FONT_MSG = ("Verdana", 8)
-
+from language_CAT import *
 
 class ProcessingPage(Page):
     def __init__(self, parent):

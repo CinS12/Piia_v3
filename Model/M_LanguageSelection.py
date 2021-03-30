@@ -16,12 +16,9 @@ class ModelLanguageSelection:
 
         if lang == 0:
             lang_selected["selected"] = "cat"
-            print("Cat")
         if lang == 1:
-            print("Cast")
             lang_selected["selected"] = "cast"
         if lang == 2:
-            print("English")
             lang_selected["selected"] = "eng"
 
         print(lang_selected)
