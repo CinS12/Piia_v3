@@ -10,8 +10,9 @@ FONT_MSG = ("Verdana", 8)
 
 class PreSegmentationGUI:
 
-    def __init__(self, parent):
+    def __init__(self, parent, lang):
         self.container = parent
+        self.lang = lang
         return
 
     def ask_mask_confirmation(self, img_cv2_mask, scale_percent):
@@ -35,9 +36,9 @@ class PreSegmentationGUI:
         x = (ws / 2) - (w / 2)
         y = (hs / 3) - (h / 3)
         self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
-        self.popup.wm_title("Confirmar regió")
+        self.popup.wm_title(self.lang.PRE_CONFIRM_REGION)
         # Definir títol del popup
-        title = ttk.Label(self.popup, text="És correcte la regió seleccionada?", font=FONT_TITOL)
+        title = ttk.Label(self.popup, text=self.lang.PRE_CORRECT_REGION, font=FONT_TITOL)
         title.configure(anchor="center")
         title.pack(side="top", fill="x", pady=10)
         # Carregar la roi
@@ -53,8 +54,8 @@ class PreSegmentationGUI:
         self.confirmation_img = tk.Label(self.popup, image=img_imgtk_mask)
         self.confirmation_img.pack(pady=30)
         # Botons GUI
-        button1 = ttk.Button(self.popup, text="Sí", command=lambda: self.segmentacio_ok(img_imgtk_mask, img_cv2_mask))
-        button2 = ttk.Button(self.popup, text="No", command=self.segmentacio_ko)
+        button1 = ttk.Button(self.popup, text=self.lang.YES, command=lambda: self.segmentacio_ok(img_imgtk_mask, img_cv2_mask))
+        button2 = ttk.Button(self.popup, text=self.lang.NO, command=self.segmentacio_ko)
         button1.pack()
         button2.pack()
         self.popup.mainloop()

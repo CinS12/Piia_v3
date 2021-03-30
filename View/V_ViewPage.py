@@ -9,8 +9,9 @@ FONT_MSG = ("Verdana", 8)
 
 
 class ViewPage(Page):
-    def __init__(self, parent):
+    def __init__(self, parent, lang):
         self.container = parent
+        self.lang = lang
         self.page = tk.Frame(self.container)
         self.elements_page()
         return

@@ -36,9 +36,9 @@ class ViewSetup:
             self.lang = language_ENG.LangENG()
 
         self.main_page = V_MainPage.MainPage(self.container, self.lang)
-        self.processing_page = V_ProcessingPage.ProcessingPage(self.container)
-        self.view_page = V_ViewPage.ViewPage(self.container)
-        self.pre_processing_gui = V_PreSegmentationGUI.PreSegmentationGUI(self.container)
+        self.processing_page = V_ProcessingPage.ProcessingPage(self.container, self.lang)
+        self.view_page = V_ViewPage.ViewPage(self.container, self.lang)
+        self.pre_processing_gui = V_PreSegmentationGUI.PreSegmentationGUI(self.container, self.lang)
         self.processing_gui = V_SegmentationGUI.SegmentationGUI(self.container, self.lang)
         self.crear_menu()
         self.main_page.page.tkraise()
@@ -50,17 +50,11 @@ class ViewSetup:
 
         self.menubar = tk.Menu(self.container)
 
-        self.file_menu = tk.Menu(self.menubar, tearoff=0)
-        self.file_menu.add_command(label="Save settings", command=lambda: self.popupmsg("Pàgina en construcció!"))
-        self.file_menu.add_separator()
-        self.file_menu.add_command(label="Exit", command=quit)
-        self.menubar.add_cascade(label="File", menu=self.file_menu)
-
         language_menu = tk.Menu(self.menubar, tearoff=0)
         language_menu.add_command(label="Català", command=lambda: self.change_lang(0))
         language_menu.add_command(label="Castellano", command=lambda: self.change_lang(1))
         language_menu.add_command(label="English", command=lambda: self.change_lang(2))
-        self.menubar.add_cascade(label="Language", menu=language_menu)
+        self.menubar.add_cascade(label=self.lang.LANG, menu=language_menu)
         self.container.config(menu=self.menubar)
 
     def change_lang(self, lang):

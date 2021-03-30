@@ -38,10 +38,10 @@ class SegmentationGUI:
         x = (ws / 2) - (w / 2)
         y = (hs / 3) - (h / 3)
         self.popup_img.geometry('%dx%d+%d+%d' % (w, h, x, y))
-        self.popup_img.wm_title("Eina de segmentació")
+        self.popup_img.wm_title(self.lang.SEG_TITLE)
         # Definir títol del popup
         title = ttk.Label(self.popup_img,
-                          text="Selecciona el perímetre total i els diferents tipus de teixits de la ferida:",
+                          text=self.lang.SEG_DESC,
                           font=FONT_TITOL)
         title.configure(anchor="center")
         # Frame per les dades
@@ -49,9 +49,9 @@ class SegmentationGUI:
         data_frame = ttk.Frame(self.popup_img)
         accept_frame = ttk.Frame(self.popup_img)
         # Botons GUI
-        button_balance = ttk.Button(balance_frame, text="Whitebalance", command=lambda: self.whitebalance(img_cv2_mask))
-        button_perimeter = ttk.Button(data_frame, text="Perimeter", command=self.ask_perimeter)
-        button_granulation = ttk.Button(data_frame, text="Granulation", command=self.roi_granulation)
+        button_balance = ttk.Button(balance_frame, text=self.lang.SEG_WHITE, command=lambda: self.whitebalance(img_cv2_mask))
+        button_perimeter = ttk.Button(data_frame, text=self.lang.SEG_PERIMETER, command=self.ask_perimeter)
+        button_granulation = ttk.Button(data_frame, text=self.lang.SEG_GRANULATION, command=self.roi_granulation)
         button_necrosis = ttk.Button(data_frame, text="Necrosis", command=self.roi_necrosis)
         button_slough = ttk.Button(data_frame, text="Slough", command=self.roi_slough)
         button_accept = ttk.Button(accept_frame, text="Accept", command=self.img_processed_accepted)
