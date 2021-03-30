@@ -90,13 +90,13 @@ class ViewPage(Page):
             self.llista.insert(tk.END, "Imatge: "+str(i+1))
         self.llista.bind('<Double-1>', self.select_element)
 
-    def select_element(self):
+    def select_element(self, aux):
         """
         Sends the request with the id of list's selected element.
         Parameters
         ----------
         """
-
+        #print(aux)
         n_elements = self.llista.curselection()
         for i in n_elements:
             pub.sendMessage("ASK_IMAGE_i", i=i+1)

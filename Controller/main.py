@@ -8,6 +8,7 @@ if __name__ == "__main__":
     #if lang.lang != "":
     root = tk.Tk()
     root.title("PIIA")
+
     user32 = ctypes.windll.user32
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     w = screensize[0]
@@ -17,7 +18,8 @@ if __name__ == "__main__":
     x = (ws / 2) - (w / 2)
     y = (hs / 3) - (h / 3)
     root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-    app = C_Setup.ControllerSetup(root)
+
+    app = C_Setup.ControllerSetup(root, w, h, x, y)
     root.mainloop()
     #else:
         #lang.lang = lang.view_lang.ask_lang()

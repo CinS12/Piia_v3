@@ -7,12 +7,12 @@ FONT_TITOL = ("Verdana", 10)
 FONT_MSG = ("Verdana", 8)
 
 class ViewLanguageSelection():
-    def __init__(self):
-
+    def __init__(self, parent):
+        self.parent = parent
         return
     def ask_lang(self):
-        popup = tk.Toplevel()
-        #popup = self.popup
+        #popup = tk.Toplevel()
+        popup = self.parent
         ws = popup.winfo_screenwidth()
         hs = popup.winfo_screenheight()
         w = 300

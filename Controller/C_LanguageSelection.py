@@ -9,10 +9,10 @@ import tkinter as tk
 class LanguageSelection:
     def __init__(self, parent):
         self.lang = ""
-
+        self.parent = parent
         pub.subscribe(self.lang_selected, "LANG_SELECTED")
 
-        self.view_lang = V_LanguageSelection.ViewLanguageSelection()
+        self.view_lang = V_LanguageSelection.ViewLanguageSelection(parent)
         self.model_lang = M_LanguageSelection.ModelLanguageSelection()
         self.check_language()
         return
@@ -24,9 +24,10 @@ class LanguageSelection:
             print(lang)
             lang = lang["selected"]
             self.lang = lang
-
+            pub.sendMessage("LANG_OK_LOADED")
 
     def lang_selected(self, lang):
         self.lang = lang
         self.model_lang.updateSelected(lang)
         print(lang)
+        pub.sendMessage("LANG_OK_ASKED")
