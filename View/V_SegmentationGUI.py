@@ -4,14 +4,17 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 from pathlib import Path
+from View.V_ToolTip import ToolTip
 
 FONT_BENVINGUDA = ("Verdana", 12)
 FONT_TITOL = ("Verdana", 10)
 FONT_MSG = ("Verdana", 8)
 
+
 class SegmentationGUI:
 
-    def __init__(self, parent):
+    def __init__(self, parent, lang):
+        self.lang = lang
         self.container = parent
         return
 
@@ -37,29 +40,36 @@ class SegmentationGUI:
         self.popup_img.geometry('%dx%d+%d+%d' % (w, h, x, y))
         self.popup_img.wm_title("Eina de segmentació")
         # Definir títol del popup
-        title = ttk.Label(self.popup_img, text="Selecciona el perímetre total i els diferents tipus de teixits de la ferida:", font=FONT_TITOL)
+        title = ttk.Label(self.popup_img,
+                          text="Selecciona el perímetre total i els diferents tipus de teixits de la ferida:",
+                          font=FONT_TITOL)
         title.configure(anchor="center")
-        #Frame per les dades
+        # Frame per les dades
         balance_frame = ttk.Frame(self.popup_img, borderwidth=2, relief="groove")
         data_frame = ttk.Frame(self.popup_img)
         accept_frame = ttk.Frame(self.popup_img)
         # Botons GUI
-        button_balance = ttk.Button(balance_frame, text="Whitebalance",command=lambda:self.whitebalance(img_cv2_mask))
-        button_perimeter = ttk.Button(data_frame, text="Perimeter",command=self.ask_perimeter)
+        button_balance = ttk.Button(balance_frame, text="Whitebalance", command=lambda: self.whitebalance(img_cv2_mask))
+        button_perimeter = ttk.Button(data_frame, text="Perimeter", command=self.ask_perimeter)
         button_granulation = ttk.Button(data_frame, text="Granulation", command=self.roi_granulation)
         button_necrosis = ttk.Button(data_frame, text="Necrosis", command=self.roi_necrosis)
         button_slough = ttk.Button(data_frame, text="Slough", command=self.roi_slough)
         button_accept = ttk.Button(accept_frame, text="Accept", command=self.img_processed_accepted)
-        #Labels de la GUI
-        self.label_balance = tk.Label(balance_frame, text="Eina en desenvolupament, requereix supervisió.", fg="black", font=FONT_MSG)
-        self.label_perimeter = tk.Label(data_frame, text="Selecciona el perímetre total de la ferida", fg="black", font=FONT_MSG)
+        button_helper_granulation = tk.Button(data_frame, text="?", height=1, width=2)
+        button_helper_necrosis = tk.Button(data_frame, text="?", height=1, width=2)
+        button_helper_slough = tk.Button(data_frame, text="?", height=1, width=2)
+        # Labels de la GUI
+        self.label_balance = tk.Label(balance_frame, text="Eina en desenvolupament, requereix supervisió.", fg="black",
+                                      font=FONT_MSG)
+        self.label_perimeter = tk.Label(data_frame, text="Selecciona el perímetre total de la ferida", fg="black",
+                                        font=FONT_MSG)
         self.label_granulation = ttk.Label(data_frame, text="Zones seleccionades: 0", font=FONT_MSG)
         self.label_necrosis = ttk.Label(data_frame, text="Zones seleccionades: 0", font=FONT_MSG)
         self.label_slough = ttk.Label(data_frame, text="Zones seleccionades: 0", font=FONT_MSG)
         # Carregar la roi
         self.img_show = tk.Label(self.popup_img, image=img_imgtk_mask)
 
-        #Col·locar els elements
+        # Col·locar els elements
         button_balance.grid(row=1, column=1, padx=5, pady=5)
         self.label_balance.grid(row=1, column=2, padx=5, pady=5)
         button_perimeter.grid(row=2, column=1, padx=5, pady=5)
@@ -72,11 +82,20 @@ class SegmentationGUI:
         self.label_slough.grid(row=5, column=2, padx=5, pady=5)
         button_accept.pack()
 
+        button_helper_granulation.grid(row=3, column=0, padx=5, pady=5)
+        button_helper_necrosis.grid(row=4, column=0, padx=5, pady=5)
+        button_helper_slough.grid(row=5, column=0, padx=5, pady=5)
+
         title.pack(pady=10)
         balance_frame.pack(pady=5, padx=5)
         data_frame.pack(pady=5, padx=5)
         self.img_show.pack(pady=10)
         accept_frame.pack(pady=10, padx=10)
+
+        # Add tool tips to tissue buttons
+        ToolTip.CreateToolTip(button_helper_granulation, text=self.lang.HELPER_GRANULATION)
+        ToolTip.CreateToolTip(button_helper_necrosis, text=self.lang.HELPER_NECROSIS)
+        ToolTip.CreateToolTip(button_helper_slough, text=self.lang.HELPER_SLOUGH)
 
         self.popup_img.mainloop()
 
@@ -146,7 +165,9 @@ class SegmentationGUI:
         self.popup.wm_title("Confirm white balance")
         # Definir títol del popup
         title = ttk.Label(self.popup, text="White Balance Correction", font=FONT_TITOL)
-        label_warning = ttk.Label(self.popup, text="Waring: method is still developing and testing. Please check the result:", font=FONT_MSG)
+        label_warning = ttk.Label(self.popup,
+                                  text="Waring: method is still developing and testing. Please check the result:",
+                                  font=FONT_MSG)
         label_info = ttk.Label(self.popup, text="Original image // White balanced image", font=FONT_MSG)
         title.configure(anchor="center")
         label_warning.configure(anchor="center")
@@ -226,7 +247,7 @@ class SegmentationGUI:
            image resize value (default = 100)
         """
         cv2.destroyAllWindows()
-        #Crear la finestra
+        # Crear la finestra
         self.popup = tk.Toplevel()
         ws = self.popup.winfo_screenwidth()
         hs = self.popup.winfo_screenheight()
@@ -236,16 +257,16 @@ class SegmentationGUI:
         y = (hs / 3) - (h / 3)
         self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
         self.popup.wm_title("Confirmar regió")
-        #Definir títol del popup
+        # Definir títol del popup
         title = ttk.Label(self.popup, text="És correcte la regió seleccionada?", font=FONT_TITOL)
         title.configure(anchor="center")
         title.pack(side="top", fill="x", pady=10)
-        #Carregar la roi i la imatge
+        # Carregar la roi i la imatge
         im_rgb = cv2.cvtColor(img_cv2_mask, cv2.COLOR_BGR2RGB)
         roi_rgb = cv2.cvtColor(img_cv2_roi, cv2.COLOR_BGR2RGB)
         im = Image.fromarray(im_rgb)
         roi = Image.fromarray(roi_rgb)
-        #Escalar la imatge
+        # Escalar la imatge
         width = int(img_cv2_mask.shape[1] * scale_percent / 100)
         height = int(img_cv2_mask.shape[0] * scale_percent / 100)
         im = im.resize((width, height))
@@ -257,8 +278,8 @@ class SegmentationGUI:
         img_label.grid(row=1, column=1, padx=5, pady=5)
         roi_label.grid(row=1, column=2, padx=5, pady=5)
         images_frame.pack(pady=30)
-        #Botons GUI
-        button1 = ttk.Button(self.popup, text="Sí", command=lambda:self.roi_ok(roi_rgb, tissue, ring))
+        # Botons GUI
+        button1 = ttk.Button(self.popup, text="Sí", command=lambda: self.roi_ok(roi_rgb, tissue, ring))
         button2 = ttk.Button(self.popup, text="No", command=self.segmentacio_ko)
         button1.pack()
         button2.pack()
@@ -276,7 +297,7 @@ class SegmentationGUI:
         """
 
         self.popup.destroy()
-        if (ring==1):
+        if (ring == 1):
             img_cv2_roi = cv2.cvtColor(img_cv2_roi, cv2.COLOR_BGR2RGB)
             pub.sendMessage("ROI_CONFIRMATED", img_cv2_roi=img_cv2_roi, tissue=tissue, ring=ring)
         else:
@@ -293,7 +314,7 @@ class SegmentationGUI:
     def ask_zone_type(self, tissue):
 
         cv2.destroyAllWindows()
-        #Crear la finestra
+        # Crear la finestra
         self.popup = tk.Toplevel()
         ws = self.popup.winfo_screenwidth()
         hs = self.popup.winfo_screenheight()
@@ -303,13 +324,13 @@ class SegmentationGUI:
         y = (hs / 3) - (h / 3)
         self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
         self.popup.wm_title("Tipus de zona")
-        #Definir títol del popup
+        # Definir títol del popup
         title = ttk.Label(self.popup, text="Selecciona el tipus de zona:", font=FONT_TITOL)
         title.configure(anchor="center")
         title.pack(side="top", fill="x", pady=20)
         frame = tk.Frame(self.popup)
         frame.pack()
-        #Carregar les imatges
+        # Carregar les imatges
         path = Path(__file__).parent / "../resources/anella.png"
         img_a = ImageTk.PhotoImage(Image.open(path))
         img_anella = tk.Label(frame, image=img_a)
@@ -319,10 +340,9 @@ class SegmentationGUI:
         img_tancat = tk.Label(frame, image=img_t)
         img_tancat.grid(row=1, column=2, padx=5, pady=5)
 
-
-        #Botons GUI
-        button1 = ttk.Button(frame, text="Anella", command=lambda:self.zona_anella(tissue))
-        button2 = ttk.Button(frame, text="Tancada", command=lambda:self.zona_tancada(tissue))
+        # Botons GUI
+        button1 = ttk.Button(frame, text="Anella", command=lambda: self.zona_anella(tissue))
+        button2 = ttk.Button(frame, text="Tancada", command=lambda: self.zona_tancada(tissue))
         button1.grid(row=2, column=1, padx=5, pady=10)
         button2.grid(row=2, column=2, padx=5, pady=10)
         self.popup.mainloop()
@@ -345,10 +365,11 @@ class SegmentationGUI:
         y = (hs / 3) - (h / 3)
         self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
         self.popup.wm_title("Perímetre exterior")
-        label = ttk.Label(self.popup, text="Teixit "+ tissue+ " : selecciona el perímetre exterior de la regió", font=FONT_MSG)
+        label = ttk.Label(self.popup, text="Teixit " + tissue + " : selecciona el perímetre exterior de la regió",
+                          font=FONT_MSG)
         label.configure(anchor="center")
         label.pack(side="top", fill="x", pady=10)
-        button1 = ttk.Button(self.popup, text="Exterior", command=lambda:self.ring_ext_clicked(tissue=tissue))
+        button1 = ttk.Button(self.popup, text="Exterior", command=lambda: self.ring_ext_clicked(tissue=tissue))
         button1.pack()
         self.popup.mainloop()
 
@@ -377,9 +398,10 @@ class SegmentationGUI:
         y = (hs / 3) - (h / 3)
         self.popup.geometry('%dx%d+%d+%d' % (w, h, x, y))
         self.popup.wm_title("Perímetre interior")
-        label = ttk.Label(self.popup, text="Teixit "+ tissue+ " : selecciona el perímetre interior de la regió", font=FONT_MSG)
+        label = ttk.Label(self.popup, text="Teixit " + tissue + " : selecciona el perímetre interior de la regió",
+                          font=FONT_MSG)
         label.configure(anchor="center")
         label.pack(side="top", fill="x", pady=10)
-        button1 = ttk.Button(self.popup, text="Interior", command=lambda:self.ring_int_clicked(tissue=tissue))
+        button1 = ttk.Button(self.popup, text="Interior", command=lambda: self.ring_int_clicked(tissue=tissue))
         button1.pack()
         self.popup.mainloop()

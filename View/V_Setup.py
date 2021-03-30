@@ -39,7 +39,7 @@ class ViewSetup:
         self.processing_page = V_ProcessingPage.ProcessingPage(self.container)
         self.view_page = V_ViewPage.ViewPage(self.container)
         self.pre_processing_gui = V_PreSegmentationGUI.PreSegmentationGUI(self.container)
-        self.processing_gui = V_SegmentationGUI.SegmentationGUI(self.container)
+        self.processing_gui = V_SegmentationGUI.SegmentationGUI(self.container, self.lang)
         self.crear_menu()
         self.main_page.page.tkraise()
 
