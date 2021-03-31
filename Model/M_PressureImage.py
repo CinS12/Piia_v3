@@ -64,6 +64,7 @@ class Pressure_img:
         self.img_origin = None
         self.img = None
         self.mask = None
+        self.previous_roi = None
         self.perimetre_done = False
         self.perimetre_cm = 0
         self.perimetre = None
@@ -170,8 +171,24 @@ class Pressure_img:
             pub.sendMessage("UPDATE_SLOUGH_COUNT", number=len(self.slough))
 
     def roi_crop(self, im, tissue, *args):
+
         """Tool used to allow user select a free shape roi with the mouse
         """
+
+        if (tissue == "Perimeter"):
+            print("ARA PERIMETRE")
+            self.previous_roi = im.copy()
+        if len(args) == 0:
+            print("TANCADA")
+            self.previous_roi = im.copy()
+        for ar in args:
+            if ar == 2:
+                print("RING INT")
+                #self.previous_roi = im.copy()
+            else:
+                print("RING EXT")
+                self.previous_roi = im.copy()
+
 
         class Point:
             """

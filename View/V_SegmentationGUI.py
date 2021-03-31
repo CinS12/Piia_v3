@@ -310,6 +310,7 @@ class SegmentationGUI:
 
         cv2.destroyAllWindows()
         self.popup.destroy()
+        pub.sendMessage("ROI_KO")
 
     def ask_zone_type(self, tissue):
 

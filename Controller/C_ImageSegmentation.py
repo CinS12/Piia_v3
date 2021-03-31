@@ -1,3 +1,4 @@
+import cv2
 from pubsub import pub
 
 
@@ -24,6 +25,8 @@ class ControllerImageSegmentation:
         pub.subscribe(self.ring_ext, "RING_EXT")
         pub.subscribe(self.ring_int, "RING_INT")
         pub.subscribe(self.roi_confirmated, "ROI_CONFIRMATED")
+
+        pub.subscribe(self.roi_ko, "ROI_KO")
         return
 
     def segmentation_gui(self, img_imgtk_mask, img_cv2_mask):
@@ -39,6 +42,7 @@ class ControllerImageSegmentation:
         print("controller - segmentation_gui!")
         self.pressure_img.close_all()
         self.pressure_img.mask = img_cv2_mask
+        self.pressure_img.previous_roi = img_cv2_mask.copy()
         self.view.processing_gui.segmentation_gui(img_imgtk_mask, img_cv2_mask)
 
     def whitebalance(self, img_cv2_mask):
@@ -169,9 +173,10 @@ class ControllerImageSegmentation:
             tissue of the roi
         """
         print("controller - roi_confirmated!")
-        self.view.processing_gui.updateLabelGUI(self.pressure_img.mask)
+        #self.view.processing_gui.updateLabelGUI(self.pressure_img.mask)
         if(ring == 0):
             #Zona tancada
+            self.view.processing_gui.updateLabelGUI(self.pressure_img.mask)
             self.pressure_img.save_mask_data(img_cv2_roi, tissue)
         if(ring==1):
             #Anella ext
@@ -179,8 +184,13 @@ class ControllerImageSegmentation:
             self.pressure_img.ring_ext = img_cv2_roi
             self.view.processing_gui.ask_ring_in(tissue)
         if(ring==2):
+            self.view.processing_gui.updateLabelGUI(self.pressure_img.mask)
             #Anella interna
             print("Anella interior")
+            #self.pressure_img.mask = self.pressure_img.previous_roi
             self.pressure_img.ring_int = img_cv2_roi
             self.pressure_img.save_mask_data(img_cv2_roi, tissue)
             #Guardar imatge
+
+    def roi_ko(self):
+        self.pressure_img.mask = self.pressure_img.previous_roi
